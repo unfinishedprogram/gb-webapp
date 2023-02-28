@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 gb-core = { git = "https://github.com/unfinishedprogram/gb-core.git", branch = "main" }
+sycamore = "0.8"
