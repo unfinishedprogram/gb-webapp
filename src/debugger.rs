@@ -31,4 +31,10 @@ impl Debugger {
         let lcd = &self.gameboy.ppu.lcd.as_ref().unwrap();
         return lcd.front_buffer().to_vec();
     }
+
+    pub fn load_rom(&mut self, rom: &[u8]) {
+        self.gameboy = gameboy::Gameboy::default();
+        self.gameboy.bind_lcd(GameboyLCD::default());
+        self.gameboy.load_rom(rom, None);
+    }
 }

@@ -1,41 +1,35 @@
-#![feature(async_closure)]
 #![feature(local_key_cell_methods)]
+use gb_webapp::application::{logger::LOGGER, setup_listeners, APPLICATION};
+use log::LevelFilter;
+use wasm_bindgen::prelude::wasm_bindgen;
 
-mod screen;
+#[allow(dead_code)]
+#[wasm_bindgen]
+pub fn load_rom(rom: &[u8], source: String) {
+    let source = serde_json::from_str(&source).unwrap();
+    APPLICATION.with_borrow_mut(|app| {
+        app.load_rom(rom, Some(source));
+        app.start();
+    });
+}
 
-use std::cell::RefCell;
-
-use debugger::Debugger;
-use screen::Screen;
-mod debugger;
-use futures_util::stream::StreamExt;
-use gloo::timers::future::IntervalStream;
-use sycamore::{futures::spawn_local_scoped, prelude::*};
+#[allow(dead_code)]
+#[wasm_bindgen]
+pub fn set_speed(multiplier: f64) {
+    APPLICATION.with_borrow_mut(|app| {
+        app.set_speed(multiplier);
+        app.start();
+    });
+}
 
 fn main() {
-    console_error_panic_hook::set_once();
+    log::set_logger(&LOGGER).unwrap();
+    log::set_max_level(LevelFilter::Info);
 
-    sycamore::render(|cx| {
-        let buffer = create_signal::<Vec<u8>>(cx, vec![]);
-        let debugger = create_signal(cx, RefCell::new(Debugger::new()));
-        let frame_stream = IntervalStream::new(16);
+    setup_listeners();
 
-        // Convert a stream into a future that runs forever.
-        spawn_local_scoped(cx, async {
-            frame_stream
-                .for_each(|_| async {
-                    let debugger = debugger.get();
-                    let mut debugger = debugger.borrow_mut();
-                    debugger.step();
-                    buffer.set(debugger.get_frame_buffer())
-                })
-                .await
-        });
-
-        view! { cx,
-            div {
-                Screen(buffer = buffer)
-            }
-        }
+    APPLICATION.with_borrow_mut(|app| {
+        // app.load_rom(include_bytes!(), None);
+        app.start();
     });
 }
