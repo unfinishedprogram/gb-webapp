@@ -1,0 +1,96 @@
+#start,
+#select {
+    color: #666;
+}
+
+#select:hover,
+#start:hover {
+    color: #888;
+}
+
+#select:active,
+#start:active {
+    color: #AAA;
+}
+
+
+*[data-pressed] {
+    color: green !important;
+}
+
+.joypad,
+.button {
+    transition: color 0.2s;
+}
+
+.joypad:hover {
+    color: #333;
+}
+
+.joypad:active {
+    color: #666;
+}
+
+.button {
+    color: red;
+}
+
+.button:hover {
+    color: #F33;
+}
+
+.button:active {
+    color: #F66;
+}
+
+#rom_upload_button {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #FFF2;
+    border: 1px solid #FFF8;
+    margin: 1rem;
+    border-radius: 1rem;
+    padding: 0.25rem 1rem;
+    font-weight: bold;
+    text-align: center;
+
+    &:hover {
+        background-color: #FFF4;
+    }
+
+    img {
+        display: block;
+        background-size: cover;
+        width: 3 rem;
+        height: 3rem;
+        background-image: url("assets/icons/file_upload.svg");
+    }
+}
+
+#screen_backdrop {
+    background-color: rgb(155, 188, 15);
+}
+
+#gameboy>#screen {
+    margin: 50%;
+}
+
+/* Minimum aspect ratio */
+@media (max-aspect-ratio: 106/174) {
+    #gb_container {
+        width: 100vw;
+    }
+}
+
+/* Minimum aspect ratio */
+@media (min-aspect-ratio: 106/174) {
+    #gb_container {
+        height: 100vh;
+    }
+}
+
+#gb_container {
+    aspect-ratio: 106/174;
+}
