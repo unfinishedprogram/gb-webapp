@@ -18,7 +18,6 @@ use web_sys::ImageData;
 
 use gameboy::{
     debugger,
-    lcd::GameboyLCD,
     save_state::{RomSource, SaveState},
     Gameboy, Mode,
 };
@@ -56,20 +55,13 @@ pub struct Application {
 
 impl Default for Application {
     fn default() -> Self {
-        let emulator_state = {
-            let mut state = Gameboy::default();
-            let lcd = GameboyLCD::default();
-            state.bind_lcd(lcd);
-            state
-        };
-
         Self {
             frame_counts: vec![0; 30],
             frame_times: vec![0.0; 30],
             _file_reader: None,
             input_state: InputState::new(),
             running_state: RunningState::Paused,
-            emulator_state,
+            emulator_state: Gameboy::default(),
             speed_multiplier: 1.0,
         }
     }
@@ -77,7 +69,7 @@ impl Default for Application {
 
 impl Application {
     pub fn render_screen(&mut self) {
-        let screen = self.emulator_state.ppu.lcd.as_ref().unwrap();
+        let screen = &self.emulator_state.ppu.lcd;
 
         let img_data =
             ImageData::new_with_u8_clamped_array(Clamped(screen.front_buffer()), 160).unwrap();
@@ -190,15 +182,12 @@ impl Application {
 
     pub fn load_rom(&mut self, rom: &[u8], source: Option<RomSource>) {
         self.emulator_state = Gameboy::default();
-        let lcd = GameboyLCD::default();
-        self.emulator_state.bind_lcd(lcd);
         self.emulator_state.load_rom(rom, source);
     }
 
     pub fn load_save_state_with_rom(&mut self, rom: &[u8], save: SaveState) {
         self.load_rom(rom, save.rom_source.clone());
         self.emulator_state = self.emulator_state.clone().load_save_state(save);
-        self.emulator_state.bind_lcd(GameboyLCD::default());
     }
 
     pub async fn load_save_state(&mut self, save: SaveState) {
