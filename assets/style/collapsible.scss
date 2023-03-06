@@ -1,5 +1,7 @@
 .collapsible {
-    .content {
+    margin: 0.5rem 0rem;
+
+    &>.content {
         max-height: 0px;
         transition: max-height 0.25s;
         display: flex;
@@ -7,7 +9,7 @@
         overflow: hidden;
     }
 
-    label::after {
+    &>label::after {
         display: inline-block;
         content: ">";
         font-weight: bold;
@@ -15,27 +17,15 @@
         margin-left: auto;
     }
 
-    &[data-open] {
-        label::after {
-            transform: rotate(90deg);
-        }
-
-        .collapsible {
-            margin: 0.5rem 0rem;
-        }
-    }
-
-    .collapsible>label {
+    &>label {
         cursor: pointer;
         display: flex;
         background-color: #000B;
         padding: 0.5rem 1rem;
     }
-}
 
+    &[data-open]>label::after {
+        transform: rotate(90deg);
 
-
-
-.collapsible[data-open]>.collapsible {
-    margin: 0.5rem 0rem;
+    }
 }
