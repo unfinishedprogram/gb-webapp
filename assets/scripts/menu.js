@@ -1,4 +1,4 @@
-import * as wasm from "/gbc-emu.js"
+import * as wasm from "/gb-webapp.js"
 
 
 console.log(wasm);
