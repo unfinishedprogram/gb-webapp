@@ -1,5 +1,6 @@
 #![feature(local_key_cell_methods)]
 use gb_webapp::application::{logger::LOGGER, setup_listeners, APPLICATION};
+
 use log::LevelFilter;
 use wasm_bindgen::prelude::wasm_bindgen;
 
